@@ -1,136 +1,87 @@
-import React, { useState } from "react";
-import MyModal from "./MyModal";
+import { useState } from "react";
+import Axios from 'axios';
+import "./index.css";
 
-const Modal = () => {
-  const [showModal, setShowModal] = useState(false);
+export interface ModalProps{
+  toggleModal: Function,
+  getData: Function,
+  modal: boolean,
+}
 
-  const closeModal = () => setShowModal(false);
+export default function Modal(props: ModalProps) {
 
-  const handleCloseButton = (
-    <button className="model-btn" onClick={closeModal}>
-      Accept It
-    </button>
-  );
+  const initialFields = {
+    name: "",
+    description: "",
+    price: "",
+    discount: "",
+    file: ""
+  };
 
-  const mainModal = (
-    <MyModal closeModal={closeModal} handleCloseButton={handleCloseButton}>
-      <h2>STAY TUNED</h2>
-      <p>
-        Subscribe to our newsletter and never miss our designs ,latest news.etc.
-        Our newsletter is sent once a week, every Monday
-      </p>
-    </MyModal>
-  );
+ const [fields, setFields] = useState(initialFields);
+
+ const handleChange = (e) => {
+  
+  if(e.target?.name === 'file'){
+    setFields({...fields, file: e.target?.files[0]});
+  }
+  else{
+    setFields({...fields, [e.target.name]: e.target.value})
+  }
+ }
+
+ const handleUpload = (e)=>{
+  e.preventDefault();
+
+  const formData = new FormData();
+  formData.append('file', fields.file);
+  formData.append('name', fields.name);
+  formData.append('description', fields.description);
+  formData.append('price', fields.price);
+  formData.append('discount', fields.discount);
+  
+  Axios.post('http://localhost:3001/upload',formData)
+  .then(()=>{
+    props.getData();
+    props.toggleModal();
+  })
+  .catch((error)=>{
+    console.log(error);
+  });
+
+ }
+
+  const toggleModal = () => {
+    props.toggleModal();
+  };
+
+  if(props.modal) {
+    document.body.classList.add('active-modal');
+  } else {
+    document.body.classList.remove('active-modal');
+  }
 
   return (
     <>
-      <button className="model-btn" onClick={() => setShowModal(true)}>
-        Open Modal
-      </button>
-      {showModal && mainModal}
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit,
-        laudantium laborum voluptas officiis nisi nesciunt numquam autem ipsa
-        cumque officia omnis quos iure eveniet accusamus iste consequuntur?
-        Odit, quia repellat.
-      </p>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit,
-        laudantium laborum voluptas officiis nisi nesciunt numquam autem ipsa
-        cumque officia omnis quos iure eveniet accusamus iste consequuntur?
-        Odit, quia repellat.
-      </p>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit,
-        laudantium laborum voluptas officiis nisi nesciunt numquam autem ipsa
-        cumque officia omnis quos iure eveniet accusamus iste consequuntur?
-        Odit, quia repellat.
-      </p>
-      <br />
-      <br />
-      <br />
-      <br />
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit,
-        laudantium laborum voluptas officiis nisi nesciunt numquam autem ipsa
-        cumque officia omnis quos iure eveniet accusamus iste consequuntur?
-        Odit, quia repellat.
-      </p>
-      <br />
-      <br />
-      <br />
-      <br />
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit,
-        laudantium laborum voluptas officiis nisi nesciunt numquam autem ipsa
-        cumque officia omnis quos iure eveniet accusamus iste consequuntur?
-        Odit, quia repellat.
-      </p>
-      <br />
-      <br />
-      <br />
-      <br />
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit,
-        laudantium laborum voluptas officiis nisi nesciunt numquam autem ipsa
-        cumque officia omnis quos iure eveniet accusamus iste consequuntur?
-        Odit, quia repellat.
-      </p>
-      <br />
-      <br />
-      <br />
-      <br />
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit,
-        laudantium laborum voluptas officiis nisi nesciunt numquam autem ipsa
-        cumque officia omnis quos iure eveniet accusamus iste consequuntur?
-        Odit, quia repellat.
-      </p>
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit,
-        laudantium laborum voluptas officiis nisi nesciunt numquam autem ipsa
-        cumque officia omnis quos iure eveniet accusamus iste consequuntur?
-        Odit, quia repellat.
-      </p>
-      <br />
-      <br />
-      <br />
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit,
-        laudantium laborum voluptas officiis nisi nesciunt numquam autem ipsa
-        cumque officia omnis quos iure eveniet accusamus iste consequuntur?
-        Odit, quia repellat.
-      </p>
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit,
-        laudantium laborum voluptas officiis nisi nesciunt numquam autem ipsa
-        cumque officia omnis quos iure eveniet accusamus iste consequuntur?
-        Odit, quia repellat.
-      </p>
-      <br />
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Suscipit,
-        laudantium laborum voluptas officiis nisi nesciunt numquam autem ipsa
-        cumque officia omnis quos iure eveniet accusamus iste consequuntur?
-        Odit, quia repellat.
-      </p>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
+      {props.modal && (
+        <div className="modal">
+          <div onClick={toggleModal} className="overlay"></div>
+          <div className="modal-content">
+            <div class='font-semibold mb-3'>Add Book</div>
+            <div class="grid gap-4 grid-cols-2">
+              <div><input className="input" type='text' placeholder='name' name='name' id='name' onChange={handleChange} /></div>
+              <div ><input className="input" type='text' placeholder='description' name='description' id='description' onChange={handleChange}/></div>
+              <div><input className="input" type='number' placeholder='price' name='price' id='price' onChange={handleChange} /></div>
+              <div><input className="input" type='number' placeholder='discount' name='discount' id='discount' onChange={handleChange} /></div>
+              <div><input type='file' name='file' onChange={handleChange}/></div>
+            </div>
+            <button class='px-4 py-2 mt-4 w-28 font-semibold text-sm bg-cyan-500 text-white rounded-full shadow-sm' onClick={handleUpload}>Upload</button>
+            <button className="close-modal" onClick={toggleModal}>
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
-};
-
-export default Modal;
+}

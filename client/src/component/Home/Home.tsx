@@ -8,7 +8,7 @@ const Home = () => {
 
      const [data, setData] = useState([]);
      const [page, setPage] = useState(0);
-     const [perpage, setPerPage] = useState(10);
+     const perpage = 10;
      const [modal, setModal] = useState(false);
      const [loading, setLoading] = useState(true);
     
@@ -23,6 +23,13 @@ const Home = () => {
         getDataApi();
     },[page]);
     
+//     const fetchBusinesses = useCallback( () => {
+//         return fetch("theURL", {method: "GET"}
+//     )
+//     .then(() => { /* Some stuff */ })
+//     .catch(() => { /* Some error handling */ })
+//   }, [page])
+
     const toggleModal = () => {
         setModal(!modal);
       };
@@ -40,7 +47,7 @@ const Home = () => {
         }
     }
 
-    const getDataApi = () => {
+    function getDataApi() {
        
         Axios.get(`http://localhost:3001/getBooks?page=${page}&perpage=${perpage}`,
         { 'headers': { 'Content-Type': 'application/json' } }

@@ -1,7 +1,4 @@
-import { useEffect, useState } from 'react';
-import Axios from 'axios';
 import Home from './component/Home/Home';
-import Modal from './component/AddBook/Modal';
 
 function App() {
 
@@ -12,5 +9,5 @@ function App() {
     </>
   )
 }
-
+// "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 export default App;

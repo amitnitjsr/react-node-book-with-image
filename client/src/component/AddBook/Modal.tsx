@@ -3,8 +3,8 @@ import Axios from 'axios';
 import "./index.css";
 
 export interface ModalProps{
-  toggleModal: Function,
-  getData: Function,
+  toggleModal: () => void,
+  getData: () => void,
   modal: boolean,
 }
 
